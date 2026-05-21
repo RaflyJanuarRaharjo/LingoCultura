@@ -216,6 +216,21 @@ const GLOBAL_CSS = `
   .nav-btn{background:#58CC02;color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;padding:8px 18px;border:none;border-radius:12px;cursor:pointer;transition:all .2s;border-bottom:3px solid #45A800;}
   .nav-btn:hover{background:#50B800;transform:translateY(-1px);}
   .nav-btn:active{transform:translateY(1px);border-bottom-width:1px;}
+  .nav-hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;width:40px;height:40px;cursor:pointer;gap:5px;background:none;border:none;padding:4px;}
+  .nav-hamburger span{display:block;width:24px;height:2.5px;background:#3C3C3C;border-radius:4px;transition:all .3s;}
+  .nav-hamburger.open span:nth-child(1){transform:translateY(7.5px) rotate(45deg);}
+  .nav-hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+  .nav-hamburger.open span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg);}
+  .nav-mobile{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(255,249,240,0.98);backdrop-filter:blur(12px);border-bottom:2px solid #F0E0C0;flex-direction:column;padding:1rem 2rem 1.5rem;gap:.2rem;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.08);}
+  .nav-mobile.open{display:flex;}
+  .nav-mobile .nav-link{font-size:1rem;padding:10px 0;border-bottom:1px solid #F0E0C0;color:#3C3C3C;}
+  .nav-mobile .nav-link:last-of-type{border-bottom:none;}
+  .nav-mobile .nav-btn{margin-top:.8rem;width:100%;padding:12px;font-size:1rem;border-radius:14px;text-align:center;}
+  @media(max-width:768px){
+    .nav-links{display:none;}
+    .nav-hamburger{display:flex;}
+    .nav{padding:0 1.2rem;}
+  }
 
   /* HERO */
   .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding-top:64px;}
@@ -997,7 +1012,8 @@ function GameHub({ onStart, onBack }) {
    LANDING PAGE
 ═══════════════════════════════════════════════════════════ */
 function LandingPage({ onPlay, onEnc }) {
-  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({behavior:'smooth'});
+  const scrollTo = (id) => { setMenuOpen(false); document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); };
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <div>
       {/* NAV */}
@@ -1011,7 +1027,19 @@ function LandingPage({ onPlay, onEnc }) {
           <span className="nav-link" onClick={onEnc}>Encyclopedia</span>
           <button className="nav-btn" onClick={onPlay}>Play Now</button>
         </div>
+        <button className={`nav-hamburger ${menuOpen?'open':''}`} onClick={()=>setMenuOpen(o=>!o)} aria-label="Menu">
+          <span/><span/><span/>
+        </button>
       </nav>
+      {/* MOBILE MENU */}
+      <div className={`nav-mobile ${menuOpen?'open':''}`}>
+        <span className="nav-link" onClick={()=>scrollTo('home')}>Home</span>
+        <span className="nav-link" onClick={()=>scrollTo('about')}>About</span>
+        <span className="nav-link" onClick={()=>scrollTo('modes')}>Modes</span>
+        <span className="nav-link" onClick={()=>scrollTo('team')}>Team</span>
+        <span className="nav-link" onClick={()=>{setMenuOpen(false);onEnc();}}>Encyclopedia</span>
+        <button className="nav-btn" onClick={()=>{setMenuOpen(false);onPlay();}}>Play Now 🎮</button>
+      </div>
 
       {/* HERO */}
       <section className="hero" id="home">
