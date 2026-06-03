@@ -715,6 +715,7 @@ const GLOBAL_CSS = `
   .popup { background: #fff; border-radius: 26px; max-width: clamp(440px,35vw,580px); width: 100%; animation: slideUp .3s cubic-bezier(.34,1.56,.64,1); max-height: 90vh; overflow-y: auto; }
   @keyframes slideUp { from{transform:translateY(40px) scale(.95);opacity:0} to{transform:translateY(0) scale(1);opacity:1} }
   .popup-header { padding: clamp(1.4rem,2vw,2rem) clamp(1.4rem,2vw,2rem) 1rem; display: flex; align-items: flex-start; gap: 1rem; }
+  .popup-header-text { display: flex; flex-direction: column; align-items: flex-start; text-align: left; min-width: 0; flex: 1; }
   .popup-emoji-box { width: clamp(60px,5.5vw,80px); height: clamp(60px,5.5vw,80px); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: clamp(1.8rem,2.5vw,2.5rem); flex-shrink: 0; }
   .popup-title  { font-family: 'Fredoka One', cursive; font-size: clamp(1.4rem,1.8vw,2rem); color: var(--text); }
   .popup-origin { font-size: clamp(.78rem,.85vw,.92rem); color: var(--muted); font-weight: 600; margin-top: .2rem; }
@@ -740,10 +741,10 @@ const GLOBAL_CSS = `
   /* === RESULT PAGE === */
   .result-page { min-height: 100vh; background: linear-gradient(135deg,#F0FFF0,#FFF9F0); display: flex; align-items: center; justify-content: center; padding: 2rem; }
   .result-card { background: #fff; border-radius: var(--radius-lg); padding: clamp(2rem,4vw,4rem); max-width: clamp(460px,35vw,580px); width: 100%; text-align: center; box-shadow: 0 24px 72px rgba(0,0,0,.1); }
-  .result-trophy { font-size: clamp(4rem,6vw,7rem); margin-bottom: 1rem; animation: trophy 1s cubic-bezier(.34,1.56,.64,1); }
+  .result-trophy { font-size: clamp(4rem,6vw,7rem); margin-bottom: 1.2rem; animation: trophy 1s cubic-bezier(.34,1.56,.64,1); }
   @keyframes trophy { from{transform:scale(0) rotate(-20deg)} to{transform:scale(1) rotate(0)} }
-  .result-title { font-family: 'Fredoka One', cursive; font-size: clamp(1.6rem,2.2vw,2.4rem); }
-  .result-score { font-family: 'Fredoka One', cursive; font-size: clamp(3.5rem,5.5vw,6rem); color: var(--green); margin: 1rem 0; }
+  .result-title { font-family: 'Fredoka One', cursive; font-size: clamp(1.4rem,2vw,2.2rem); line-height: 1.3; margin-bottom: .8rem; }
+  .result-score { font-family: 'Fredoka One', cursive; font-size: clamp(3.2rem,5vw,5.5rem); color: var(--green); margin: .6rem 0 .2rem; line-height: 1; }
   .result-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
   .result-stat  { background: #FAFAFA; border-radius: 16px; padding: clamp(.9rem,1.5vw,1.4rem); }
   .result-stat-val   { font-family: 'Fredoka One', cursive; font-size: clamp(1.5rem,2vw,2.2rem); color: var(--text); }
@@ -768,6 +769,7 @@ const GLOBAL_CSS = `
   .enc-card:hover { border-color: var(--green); box-shadow: 0 8px 28px rgba(88,204,2,.15); transform: translateY(-2px); }
   .enc-card-header { padding: clamp(1rem,1.5vw,1.6rem) clamp(1.2rem,1.8vw,2rem); display: flex; align-items: center; gap: 1rem; }
   .enc-card-emoji { width: clamp(52px,4.5vw,68px); height: clamp(52px,4.5vw,68px); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: clamp(1.5rem,2vw,2.2rem); flex-shrink: 0; }
+  .enc-card-info { text-align: left; display: flex; flex-direction: column; align-items: flex-start; }
   .enc-card-info h3 { font-weight: 800; font-size: clamp(.9rem,1.05vw,1.15rem); color: var(--text); }
   .enc-card-info .enc-origin { font-size: clamp(.75rem,.82vw,.9rem); color: var(--muted); font-weight: 600; margin-top: .2rem; }
   .enc-card-info .enc-cat    { display: inline-block; font-size: clamp(.65rem,.72vw,.8rem); font-weight: 800; padding: 3px 9px; border-radius: 6px; background: #E8F8E8; color: var(--green-dark); margin-top: .4rem; }
@@ -878,7 +880,7 @@ function PopupInsight({ item, points, streak, images, lang, onClose }) {
       <div className="popup" onClick={e => e.stopPropagation()}>
         <div className="popup-header">
           <div className="popup-emoji-box" style={{ background: item.bg }}>{item.emoji}</div>
-          <div>
+          <div className="popup-header-text">
             <div className="popup-title">{item.name}</div>
             <div className="popup-origin">📍 {item.origin}</div>
             <div className="popup-cat">{item.category}</div>
@@ -1244,7 +1246,6 @@ function MemoryFlipGame({ difficulty, items, images, lang, onComplete, onBack })
   );
 }
 
-
 function ResultPage({ score, maxStreak, mode, difficulty, itemCount, lang, onReplay, onMenu, onEnc }) {
   const cfg         = DIFF[difficulty];
   const t           = T[lang];
@@ -1258,7 +1259,7 @@ function ResultPage({ score, maxStreak, mode, difficulty, itemCount, lang, onRep
         <div className="result-trophy">{trophy}</div>
         <div className="result-title">{t.resultMsg(pct)}</div>
         <div className="result-score">{score}</div>
-        <div style={{ fontSize: ".85rem", color: "#BBB", fontWeight: 700, marginTop: "-8px", marginBottom: "1rem" }}>
+        <div style={{ fontSize: ".82rem", color: "#BBB", fontWeight: 700, marginTop: ".4rem", marginBottom: "1.4rem", letterSpacing: ".5px" }}>
           {t.totalScore}
         </div>
         <div className="result-stats">
@@ -1317,7 +1318,7 @@ function Encyclopedia({ images, lang, onBack }) {
       <div style={{ background: "#fff", borderBottom: "2px solid #F0E0C0", padding: "1rem var(--pad-x)",
         display: "flex", alignItems: "center", gap: "1rem", position: "sticky", top: 0, zIndex: 50 }}>
         <button className="back-btn" onClick={onBack} style={{ marginBottom: 0 }}>{t.backBtn}</button>
-        <span style={{ fontFamily: "'Fredoka One',cursive", fontSize: "1.5rem", color: "#3C3C3C" }}>
+        <span style={{ fontFamily: "'Fredoka One',cursive", fontSize: "1.5rem", color: "#3C3C3C", flex: 1, textAlign: "center" }}>
           {t.encTitle}
         </span>
         <span style={{ marginLeft: "auto", fontSize: ".82rem", color: "#BBB", fontWeight: 700 }}>
